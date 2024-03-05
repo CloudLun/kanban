@@ -1,12 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 
-import Nav from "./Components/Nav";
-import Board from "./Components/Board/Board";
+import { BrowserRouter, RouterProvider, Routes } from "react-router-dom";
+
+import Nav from "./components/Nav";
+
 
 import { DarkThemeProvider } from "./Context/ThemeContext";
 
+export type boardActions = 'board_select' | 'edit_board_card' | 'edit_board' | 'add_new_task' | 'delete_board'
+
 function App() {
-  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
   const [boardsShown, setBoardsShown] = useState({
     boardSelect: false,
@@ -17,38 +20,27 @@ function App() {
     backgroundBlur: false,
   })
 
-  const desktop: boolean = windowWidth > 1024
-  const tablet: boolean = windowWidth > 768
-  const mobile: boolean = windowWidth < 768
 
-  useEffect(() => {
-    const handleWindowResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    window.addEventListener("resize", handleWindowResize);
-    return () => {
-      window.removeEventListener("resize", handleWindowResize);
-    };
-  }, []);
-
-  const boardSelectsShownHandler = () => {
-    setBoardsShown({ ...boardsShown, boardSelect: true, backgroundBlur: true })
-  }
-
-  const editBoardCardHandler = () => {
-    setBoardsShown({ ...boardsShown, editBoardCard: true, backgroundBlur: true })
-  }
-
-  const addNewTaskHandler = () => {
-    setBoardsShown({ ...boardsShown, editBoardCard: false, addNewTask: true, backgroundBlur: true })
-  }
-
-  const editBoardHandler = () => {
-    setBoardsShown({ ...boardsShown, editBoardCard: false, editBoard: true, backgroundBlur: true })
-  }
-
-  const deletBoardHandler = () => {
-    setBoardsShown({ ...boardsShown, deleteBoard: true, backgroundBlur: true })
+  const boardsClickHandler = (type: boardActions) => {
+    switch (type) {
+      case 'board_select':
+        setBoardsShown({ ...boardsShown, boardSelect: true, backgroundBlur: true })
+        break
+      case 'edit_board_card':
+        setBoardsShown({ ...boardsShown, editBoardCard: true, backgroundBlur: true })
+        break
+      case 'edit_board':
+        setBoardsShown({ ...boardsShown, editBoardCard: false, addNewTask: true, backgroundBlur: true })
+        break
+      case 'add_new_task':
+        setBoardsShown({ ...boardsShown, deleteBoard: true, backgroundBlur: true })
+        break
+      case 'delete_board':
+        setBoardsShown({ ...boardsShown, deleteBoard: true, backgroundBlur: true })
+        break
+      default:
+        throw new Error("cannot found this action type");
+    }
   }
 
   const defaultWebpageHandler = () => {
@@ -67,8 +59,13 @@ function App() {
     <div className="relative font-jarkata" >
       <DarkThemeProvider >
         {boardsShown.backgroundBlur ? <div className="absolute top-[0px]  w-[100vw] h-[100vh] bg-black bg-opacity-[50%] z-40" onClick={defaultWebpageHandler}></div> : null}
-        <Nav boardSelect={boardsShown.boardSelect} editBoardCard={boardsShown.editBoardCard} boardSelectsShownHandler={boardSelectsShownHandler} editBoardCardHandler={editBoardCardHandler} addNewTaskHandler={addNewTaskHandler} editBoardHandler={editBoardHandler} deletBoardHandler={deletBoardHandler} desktop={desktop} tablet={tablet} mobile={mobile} />
-        <Board boardSelect={boardsShown.boardSelect} addNewTask={boardsShown.addNewTask} editBoard={boardsShown.editBoard} deleteBoard={boardsShown.deleteBoard} mobile={mobile} tablet={tablet} desktop={desktop} />
+        <Nav boardSelect={boardsShown.boardSelect} editBoardCard={boardsShown.editBoardCard} boardsClickHandler={boardsClickHandler} />
+        {/* <BrowserRouter>
+          <Routes>
+            
+          </Routes>
+        </BrowserRouter> */}
+        {/* <Board boardSelect={boardsShown.boardSelect} addNewTask={boardsShown.addNewTask} editBoard={boardsShown.editBoard} deleteBoard={boardsShown.deleteBoard} mobile={mobile} tablet={tablet} desktop={desktop} /> */}
       </DarkThemeProvider>
     </div>
   );

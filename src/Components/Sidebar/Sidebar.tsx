@@ -12,15 +12,17 @@ import iconDark from "../../assets/icon-dark-theme.svg"
 import hideSidebar from "../../assets/icon-hide-sidebar.svg"
 import showSidebar from "../../assets/icon-show-sidebar.svg"
 
+import { useMediaQuery } from "usehooks-ts";
+
 interface SidebarProps {
     setDarkThemeHandler(): void;
     darkTheme: boolean;
-    desktop: boolean;
-    tablet: boolean;
-    mobile: boolean;
 }
 
-const Sidebar = ({ setDarkThemeHandler, darkTheme, mobile, tablet, desktop }: SidebarProps) => {
+const Sidebar = ({ setDarkThemeHandler, darkTheme }: SidebarProps) => {
+    const isDesktop = useMediaQuery('(min-width:1024px)')
+    const isTablet = useMediaQuery('(min-width:768px)')
+
     const [sidebar, setSidebar] = useState<boolean>(true)
     const [boards, setBoards] = useState<string[]>([
         "Platform Launch",
@@ -53,7 +55,7 @@ const Sidebar = ({ setDarkThemeHandler, darkTheme, mobile, tablet, desktop }: Si
     }
 
 
-    return <><div className={`absolute ${sidebar ? "translate-x-[0%]" : "translate-x-[-100%] "} duration-200 ${desktop ? "flex flex-col justify-between px-[32px] pt-[18px] pb-[45px] w-[300px] h-full" : tablet ? "flex flex-col justify-between px-[24px] pt-[18px] pb-[45px] w-[260px] h-full" : "absolute top-[16px] left-[15%] px-[24px] py-[18px] w-[70%] rounded-[8px] "}  ${darkTheme ? "bg-grey-dark" : "bg-white"} `}>
+    return <><div className={`absolute ${sidebar ? "translate-x-[0%]" : "translate-x-[-100%] "} duration-200 ${isDesktop ? "flex flex-col justify-between px-[32px] pt-[18px] pb-[45px] w-[300px] h-full" : isTablet ? "flex flex-col justify-between px-[24px] pt-[18px] pb-[45px] w-[260px] h-full" : "absolute top-[16px] left-[15%] px-[24px] py-[18px] w-[70%] rounded-[8px] "}  ${darkTheme ? "bg-grey-dark" : "bg-white"} `}>
         <div>
             <div className="font-bold text-sm text-grey-medium tracking-[2.4px]">
                 ALL BOARDS (3)
@@ -72,7 +74,7 @@ const Sidebar = ({ setDarkThemeHandler, darkTheme, mobile, tablet, desktop }: Si
             </div>
         </div>
         <div>
-            <div className={`flex justify-center items-center gap-[24px] ${desktop ? "mb-[50px]" : "mb-[65px]"} w-full h-[48px] ${darkTheme ? "bg-grey-veryDark" : "bg-grey-light"}  rounded-[6px]`}>
+            <div className={`flex justify-center items-center gap-[24px] ${isDesktop ? "mb-[50px]" : "mb-[65px]"} w-full h-[48px] ${darkTheme ? "bg-grey-veryDark" : "bg-grey-light"}  rounded-[6px]`}>
                 <img src={iconLight} alt="" className="w-[18px] h-[18px]" />
                 <div className={`flex ${darkTheme ? "justify-end" : "justify-start"} items-center  px-[3px] w-[40px] h-[20px] bg-purple-main rounded-[12px] cursor-pointer`} onClick={setDarkThemeHandler}>
                     <div className="w-[14px] h-[14px] bg-white rounded-full"></div>
@@ -82,8 +84,8 @@ const Sidebar = ({ setDarkThemeHandler, darkTheme, mobile, tablet, desktop }: Si
         </div>
     </div>
         {
-            tablet &&
-            <div className={`absolute bottom-[50px] ${desktop ? "pl-[32px]" : "pl-[24px]"} flex items-center gap-[14px] ${sidebar ? "" : "bottom-[36px] px-[0] pl-[10px] w-[56px] h-[48px] bg-purple-main hover:bg-purple-hover rounded-r-[100px]"}  cursor-pointer`} onClick={hideSidebarHandler}>
+            isTablet &&
+            <div className={`absolute bottom-[50px] ${isDesktop ? "pl-[32px]" : "pl-[24px]"} flex items-center gap-[14px] ${sidebar ? "" : "bottom-[36px] px-[0] pl-[10px] w-[56px] h-[48px] bg-purple-main hover:bg-purple-hover rounded-r-[100px]"}  cursor-pointer`} onClick={hideSidebarHandler}>
                 <img src={sidebar ? hideSidebar : showSidebar} alt="" className={`${sidebar ? "w-[18px] h-[16px]" : "w-[16px] h-[12.22px]"}`} />
                 {
                     sidebar && <p className="font-bold text-[15px] text-grey-medium">Hide Sidebar</p>

@@ -1,10 +1,10 @@
 import React, { useEffect, useContext, useState } from "react";
 
-import Sidebar from "../Sidebar/Sidebar";
+import Sidebar from "../sidebar/Sidebar";
 import Column from "./Column";
 import AddNewColumn from "./AddNewColumn"
-import AddNewTask from "./AddNewTask";
-import EditBoard from "./EditBoard";
+import AddNewTask from "./AddNewTask"
+import EditBoard from "./EditBoard"
 import DeleteBoard from "./DeleteBoard";
 
 import { DarkThemeContext } from "../../Context/ThemeContext";
